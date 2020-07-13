@@ -2,6 +2,7 @@
 #
 # Exercise 2.4
 import csv
+from pprint import pprint
 
 
 def read_portfolio(filename):
@@ -15,8 +16,22 @@ def read_portfolio(filename):
     return portfolio_list
 
 
-li = read_portfolio("Data/portfolio.csv")
-print(li)
+def read_prices(filename):
+    prices = {}
+    with open(filename) as f:
+        rows = csv.reader(f)
+        for row in rows:
+            if row:
+                prices[row[0]] = float(row[1])
+        return prices
 
 
-
+if __name__ == "__main__":
+    li = read_portfolio("Data/portfolio.csv")
+    prices = read_prices("Data/prices.csv")
+    total = 0
+    print(li)
+    for each in li:
+        print(each, prices[each['name']])
+        total += each['shares'] * (prices[each['name']] - each['price'])
+    print(total)
