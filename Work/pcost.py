@@ -10,7 +10,7 @@ def portfolio_cost(filename):
     with open(filename) as f:
         rows = csv.reader(f)
         start = True
-        for row in rows:
+        for i, row in enumerate(rows, 0):
             if start:
                 start = False
                 continue
@@ -20,16 +20,17 @@ def portfolio_cost(filename):
             except ValueError:
                 field1 = "share" if not share else ''
                 field2 = "price" if not price else ''
-                print(f"Missing field {field1} {field2}.")
+                print(f"Row {i}: Missing field {field1} {field2}.")
     return cost
 
 
 cost = portfolio_cost("Data/portfolio.csv")
-print(f"Total cost {cost}")
+# print(f"Total cost {cost}")
 
 cost = portfolio_cost("Data/missing.csv")
 
 if __name__ == "__main__":
+    sys.argv.append("Data/portfolio.csv")
     filename = sys.argv[1]
     cost = portfolio_cost(filename)
     print(f"Total cost {cost}")
