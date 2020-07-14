@@ -12,7 +12,12 @@ def read_portfolio(filename):
         header = next(rows)
         for i, row in enumerate(rows):
             record = dict(zip(header, row))
-            portfolio_list.append(record)
+            stock = {
+                    'name': record['name'],
+                    'shares': int(record['shares']),
+                    'price': float(record['price']),
+                    }
+            portfolio_list.append(stock)
     return portfolio_list
 
 
@@ -29,14 +34,11 @@ def read_prices(filename):
 def make_report(portfolio, prices):
     result_list = []
     for each in portfolio:
-        try:
-            name = each['name']
-            shares = int(each['shares'])
-            price = float(prices[name])
-            change = price - float(each['price'])
-            result_list.append((name, shares, price, change))
-        except ValueError:
-            print(f"Row {i}: Bad row: {row}")
+        name = each['name']
+        shares = each['shares']
+        price = prices[name]
+        change = price - each['price']
+        result_list.append((name, shares, price, change))
     return result_list
 
 
