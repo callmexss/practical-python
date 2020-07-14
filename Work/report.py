@@ -10,9 +10,9 @@ def read_portfolio(filename):
     with open(filename) as f:
         rows = csv.reader(f)
         header = next(rows)
-        for row in rows:
-            item = dict(zip(header, (row[0], int(row[1]), float(row[2]))))
-            portfolio_list.append(item)
+        for i, row in enumerate(rows):
+            record = dict(zip(header, row))
+            portfolio_list.append(record)
     return portfolio_list
 
 
@@ -29,21 +29,24 @@ def read_prices(filename):
 def make_report(portfolio, prices):
     result_list = []
     for each in portfolio:
-        name = each['name']
-        shares = each['shares']
-        price = prices[name]
-        change = price - each['price']
-        result_list.append((name, shares, price, change))
+        try:
+            name = each['name']
+            shares = int(each['shares'])
+            price = float(prices[name])
+            change = price - float(each['price'])
+            result_list.append((name, shares, price, change))
+        except ValueError:
+            print(f"Row {i}: Bad row: {row}")
     return result_list
 
 
 if __name__ == "__main__":
-    li = read_portfolio("Data/portfolio.csv")
+    li = read_portfolio("Data/portfoliodate.csv")
     prices = read_prices("Data/prices.csv")
     total = 0
     for each in li:
         print(each, prices[each['name']])
-        total += each['shares'] * (prices[each['name']] - each['price'])
+        total += int(each['shares']) * (prices[each['name']] - float(each['price']))
     print(total)
     header = ('Name', 'Shares', 'Price', 'Change')
     sep = ''
