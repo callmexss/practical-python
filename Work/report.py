@@ -13,7 +13,7 @@ def read_portfolio(filename):
 
 
 def read_prices(filename):
-    return parse_csv(filename, types=[str, float], has_header=False)
+    return dict(parse_csv(filename, types=[str, float], has_header=False))
     
 
 def make_report(portfolio, prices):

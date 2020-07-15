@@ -9,7 +9,7 @@ def parse_csv(filename,
               types=[],
               has_header=True,
               delimiter=',',
-              silence_errors=True):
+              silence_errors=False):
     """Parse a CSV file into a list of records.
     """
     if select and not has_header:
@@ -40,7 +40,7 @@ def parse_csv(filename,
                     if not silence_errors:
                         print(f"Row {i}: Couldn't convert {row}")
                         print(f"Row {i}: Reason {err}")
-                        continue
+                    continue
 
             if has_header:
                 record = dict(zip(header, row))

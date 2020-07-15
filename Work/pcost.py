@@ -5,21 +5,22 @@
 import sys
 import csv
 
+
+from fileparse import parse_csv
+
 def portfolio_cost(filename):
     cost = 0
-    with open(filename) as f:
-        rows = csv.reader(f)
-        header = next(rows)  # get csv header
-        for i, row in enumerate(rows, 0):
-            record = dict(zip(header, row))
-            try:
-                share = record['shares']
-                price = record['price']
-                cost += int(share) * float(price)
-            except ValueError:
-                field1 = "share" if not share else ''
-                field2 = "price" if not price else ''
-                print(f"Row {i}: Bad row: {row}")
+    records = parse_csv(filename, select=['shares', 'price'], types=[int, float])
+    for record in records:
+        try:
+            share = record['shares']
+            price = record['price']
+            print(share, price)
+            cost += share * price
+        except ValueError:
+            print(f"Row {i}: Bad row: {row}")
+        except TypeError:
+            print(record)
     return cost
 
 
