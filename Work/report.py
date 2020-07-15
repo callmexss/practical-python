@@ -4,35 +4,21 @@
 import csv
 from pprint import pprint
 
+from fileparse import parse_csv
+
 
 def read_portfolio(filename):
-    portfolio_list = []
-    with open(filename) as f:
-        rows = csv.reader(f)
-        header = next(rows)
-        for i, row in enumerate(rows):
-            record = dict(zip(header, row))
-            stock = {
-                    'name': record['name'],
-                    'shares': int(record['shares']),
-                    'price': float(record['price']),
-                    }
-            portfolio_list.append(stock)
-    return portfolio_list
+    return parse_csv(filename, select=['name', 'shares', 'price'],
+                     types=[str, int, float])
 
 
 def read_prices(filename):
-    prices = {}
-    with open(filename) as f:
-        rows = csv.reader(f)
-        for row in rows:
-            if row:
-                prices[row[0]] = float(row[1])
-        return prices
-
+    return parse_csv(filename, types=[str, float], has_header=False)
+    
 
 def make_report(portfolio, prices):
     result_list = []
+    prices = dict(prices)
     for each in portfolio:
         name = each['name']
         shares = each['shares']
