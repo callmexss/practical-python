@@ -9,12 +9,14 @@ from fileparse import parse_csv
 
 
 def read_portfolio(filename):
-    return parse_csv(filename, select=['name', 'shares', 'price'],
-                     types=[str, int, float])
+    with open(filename) as f:
+        return parse_csv(f, select=['name', 'shares', 'price'],
+                         types=[str, int, float])
 
 
 def read_prices(filename):
-    return dict(parse_csv(filename, types=[str, float], has_header=False))
+    with open(filename) as f:
+        return dict(parse_csv(f, types=[str, float], has_header=False))
     
 
 def make_report(portfolio, prices):
