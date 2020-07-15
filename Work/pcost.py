@@ -5,29 +5,27 @@
 import sys
 import csv
 
-
+import report
 from fileparse import parse_csv
+
 
 def portfolio_cost(filename):
     cost = 0
-    records = parse_csv(filename, select=['shares', 'price'], types=[int, float])
+    records = report.read_portfolio(filename)
     for record in records:
         try:
             share = record['shares']
             price = record['price']
-            print(share, price)
             cost += share * price
         except ValueError:
             print(f"Row {i}: Bad row: {row}")
-        except TypeError:
-            print(record)
     return cost
 
 
-cost = portfolio_cost("Data/portfolio.csv")
+# cost = portfolio_cost("Data/portfolio.csv")
 # print(f"Total cost {cost}")
 
-cost = portfolio_cost("Data/missing.csv")
+# cost = portfolio_cost("Data/missing.csv")
 
 if __name__ == "__main__":
     sys.argv.append("Data/portfoliodate.csv")
