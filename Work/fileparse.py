@@ -14,41 +14,38 @@ def parse_csv(filename,
     """
     if select and not has_header:
         raise RuntimeError("select argument requires column headers")
+
+
     with open(filename) as f:
         records = []
         rows = csv.reader(f, delimiter=delimiter)
-        if not has_header:
-            for i, row in enumerate(rows, start=1):
-                if not row:
-                    continue
-                if types:
-                    try:
-                        records.append(tuple(
-                            [func(val) for func, val in zip(types, row)]))
-                    except ValueError as err:
-                        if not silence_errors:
-                            print(f"Row {i}: Couldn't convert {row}")
-                            print(f"Row {i}: Reason {err}")
-                else:
-                    records.append(tuple(row))
-            return records
 
-        header = next(rows)
+        header = next(rows) if has_header else ''
+
+        if select:
+            indices = [header.index(each) for each in select]
+            header = select
+
         for i, row in enumerate(rows, start=1):
             if not row:
                 continue
-            try:
-                if select:
-                    indices = [header.index(each) for each in select]
-                    header = [header[i] for i in indices]
-                    row = [row[i] for i in indices]
-                if types:
+
+            if select:
+                row = [row[i] for i in indices]
+
+            if types:
+                try:
                     row = [func(val) for func, val in zip(types, row)]
-            except ValueError as err:
-                if not silence_errors:
-                    print(f"Row {i}: Couldn't convert {row}")
-                    print(f"Row {i}: Reason {err}")
-            record = dict(zip(header, row))
+                except ValueError as err:
+                    if not silence_errors:
+                        print(f"Row {i}: Couldn't convert {row}")
+                        print(f"Row {i}: Reason {err}")
+                        continue
+
+            if has_header:
+                record = dict(zip(header, row))
+            else:
+                record = tuple(row)
             records.append(record)
     return records
 
@@ -61,6 +58,7 @@ if __name__ == "__main__":
                         select=['name', 'price'],
                         types=[str, float])
     records = parse_csv("Data/prices.csv", types=[str, float], has_header=False)
+    records = parse_csv("Data/prices.csv", has_header=False)
     records = parse_csv("Data/portfolio.dat",
                         types=[str, int, float], delimiter=' ')
     records = parse_csv("Data/portfolio.csv", types=[str, int, float])
