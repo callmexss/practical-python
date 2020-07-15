@@ -6,12 +6,14 @@ import csv
 from pprint import pprint
 
 from fileparse import parse_csv
+from stock import Stock
 
 
 def read_portfolio(filename):
     with open(filename) as f:
-        return parse_csv(f, select=['name', 'shares', 'price'],
+        records = parse_csv(f, select=['name', 'shares', 'price'],
                          types=[str, int, float])
+        return [Stock(r['name'], r['shares'], r['price']) for r in records]
 
 
 def read_prices(filename):
@@ -23,10 +25,10 @@ def make_report(portfolio, prices):
     result_list = []
     prices = dict(prices)
     for each in portfolio:
-        name = each['name']
-        shares = each['shares']
+        name = each.name
+        shares = each.shares
         price = prices[name]
-        change = price - each['price']
+        change = price - each.price
         result_list.append((name, shares, price, change))
     return result_list
 
