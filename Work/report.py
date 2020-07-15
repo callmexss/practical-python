@@ -1,6 +1,7 @@
 # report.py
 #
 # Exercise 2.4
+import sys
 import csv
 from pprint import pprint
 
@@ -46,6 +47,10 @@ def portfolio_report(portfolio_filename, prices_filename):
     print_report(report)
 
 
+def main(args_li):
+    portfolio_report(args_li[1], args_li[2])
+
+
 if __name__ == "__main__":
     # portfolio = read_portfolio("Data/portfoliodate.csv")
     # prices = read_prices("Data/prices.csv")
@@ -58,9 +63,6 @@ if __name__ == "__main__":
 
     # report = make_report(portfolio, prices)
     # print_report(report)
-    files = ['Data/portfolio.csv', 'Data/portfolio2.csv']
-    for name in files:
-        print(f'{name:-^43s}')
-        portfolio_report(name, 'Data/prices.csv')
-        print()
+    args_li = sys.argv
+    main(args_li)
 
