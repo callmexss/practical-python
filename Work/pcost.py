@@ -14,9 +14,7 @@ def portfolio_cost(filename):
     records = report.read_portfolio(filename)
     for record in records:
         try:
-            share = record.shares
-            price = record.price
-            cost += share * price
+            cost += record.cost
         except ValueError:
             print(f"Row {i}: Bad row: {row}")
     return cost
