@@ -11,7 +11,8 @@ from fileparse import parse_csv
 
 def portfolio_cost(filename):
     cost = 0
-    records = report.read_portfolio(filename)
+    portfolio = report.read_portfolio(filename)
+    return portfolio.total_cost
     for record in records:
         try:
             cost += record.cost

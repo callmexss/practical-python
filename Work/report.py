@@ -5,6 +5,7 @@ import sys
 import csv
 from pprint import pprint
 
+from portfolio import Portfolio
 import tableformat
 from fileparse import parse_csv
 from stock import Stock
@@ -12,9 +13,12 @@ from stock import Stock
 
 def read_portfolio(filename):
     with open(filename) as f:
-        records = parse_csv(f, select=['name', 'shares', 'price'],
-                         types=[str, int, float])
-        return [Stock(r['name'], r['shares'], r['price']) for r in records]
+        records = parse_csv(f,
+                            select=['name', 'shares', 'price'],
+                            types=[str, int, float])
+
+        portfolio = [Stock(r['name'], r['shares'], r['price']) for r in records]
+        return Portfolio(portfolio)
 
 
 def read_prices(filename):
