@@ -11,13 +11,15 @@ from fileparse import parse_csv
 from stock import Stock
 
 
-def read_portfolio(filename):
+def read_portfolio(filename, **opts):
     with open(filename) as f:
         records = parse_csv(f,
                             select=['name', 'shares', 'price'],
-                            types=[str, int, float])
+                            types=[str, int, float],
+                            **opts)
 
-        portfolio = [Stock(r['name'], r['shares'], r['price']) for r in records]
+        # portfolio = [Stock(r['name'], r['shares'], r['price']) for r in records]
+        portfolio = [Stock(**r) for r in records]
         return Portfolio(portfolio)
 
 
